@@ -12,7 +12,7 @@ function init(bundle, parent, options = {}) {
 
   // Render your app content to the default cylinder surface
   r360.renderToLocation(
-    r360.createRoot('CryptoModel', { /* initial props */ }),
+    r360.createRoot('ConnectedCryptoModel', { /* initial props */ }),
     new Location([0,0,-1])
   );
 
@@ -20,7 +20,7 @@ function init(bundle, parent, options = {}) {
   leftPanel.setAngle(-0.5, 0);
 
   r360.renderToSurface(
-    r360.createRoot('LeftPanel', { /* initial props */ }),
+    r360.createRoot('ConnectedLeftPanel', { /* initial props */ }),
     leftPanel
   );
 
@@ -28,7 +28,7 @@ function init(bundle, parent, options = {}) {
   rightPanel.setAngle(0.5, 0);
 
   r360.renderToSurface(
-    r360.createRoot('RightPanel', { /* initial props */ }),
+    r360.createRoot('ConnectedRightPanel', { /* initial props */ }),
     rightPanel
   );
 

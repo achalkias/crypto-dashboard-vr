@@ -5,8 +5,10 @@ import {
   StyleSheet,
   Text,
   View,
+  VrButton
 } from 'react-360';
 import Entity from 'Entity';
+import {connect,nextCrypto} from './store';
 
 export default class CryptoModel extends React.Component {
   render() {
@@ -14,7 +16,7 @@ export default class CryptoModel extends React.Component {
       <View style={styles.panel}>
         <Entity 
           style={{transform: [{scaleX: 1}, {scaleY: 1}, {scaleZ: 1}, {rotateX: 90}]}}
-          source={{obj: asset('models/BTC.obj')}}
+          source={{obj: asset(`models/${this.props.crypto}.obj`), mtl: asset(`models/${this.props.crypto}.mtl`)}}
         />
       </View>
     );
@@ -33,8 +35,8 @@ class LeftPanel extends React.Component {
     }
   }
 
-  componentDidMount() {
-    fetch('https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD')
+  fetchCryptoData(crypto) {
+    fetch(`https://min-api.cryptocompare.com/data/histoday?fsym=${crypto}&tsym=USD`)
     .then(response => response.json())
     .then(data => {
       this.setState({cryptocurrency: {
@@ -47,6 +49,17 @@ class LeftPanel extends React.Component {
       }})
     })
   }
+
+  componentDidMount() {
+    this.fetchCryptoData(this.props.crypto);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.crypto !== this.props.crypto) {
+      this.fetchCryptoData(this.props.crypto);
+    }
+  }
+
 
   render() {
     return(
@@ -81,8 +94,8 @@ class RightPanel extends React.Component {
     }
   }
 
-  componentDidMount() {
-    fetch(`https://min-api.cryptocompare.com/data/coin/generalinfo?fsyms=BTC&tsym=USD&api_key=f76186091d39b412e28260485209c9edf96ae73c983780c095e76372050a82d8`)
+  fetchCryptoData(crypto) {
+    fetch(`https://min-api.cryptocompare.com/data/coin/generalinfo?fsyms=${crypto}&tsym=USD&api_key=f76186091d39b412e28260485209c9edf96ae73c983780c095e76372050a82d8`)
     .then(response => response.json())
     .then(data => this.setState({
       cryptoData: {
@@ -95,6 +108,20 @@ class RightPanel extends React.Component {
         }
       })
     )
+  }
+
+  componentDidMount() {
+    this.fetchCryptoData(this.props.crypto);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.crypto !== this.props.crypto) {
+      this.fetchCryptoData(this.props.crypto);
+    }
+  }
+
+  clickHandler(index) {
+    nextCrypto(index);
   }
 
   render() {
@@ -110,6 +137,11 @@ class RightPanel extends React.Component {
           <Text>Block Number: {this.state.cryptoData.blockNumber}</Text>
           <Text>Block Time: {this.state.cryptoData.blockTime}</Text>
           <Text>Block Reward: {this.state.cryptoData.blockReward}</Text>
+        </View>
+        <View>
+          <VrButton style={styles.button} onClick={() => this.clickHandler(this.props.index)}>
+
+          </VrButton>
         </View>
       </View>
     );
@@ -134,10 +166,18 @@ const styles = StyleSheet.create({
  textSize: {
   fontSize: 30,
   textAlign: 'center'
+ },
+ button: {
+  height: 60,
+  width: 60,
+  backgroundColor: 'green'
  }
 });
 
+const ConnectedLeftPanel = connect(LeftPanel);
+const ConnectedRightPanel = connect(RightPanel);
+const ConnectedCryptoModel = connect(CryptoModel);
 
-AppRegistry.registerComponent('LeftPanel', () => LeftPanel);
-AppRegistry.registerComponent('RightPanel', () => RightPanel);
-AppRegistry.registerComponent('CryptoModel', () => CryptoModel);
+AppRegistry.registerComponent('ConnectedLeftPanel', () => ConnectedLeftPanel);
+AppRegistry.registerComponent('ConnectedRightPanel', () => ConnectedRightPanel);
+AppRegistry.registerComponent('ConnectedCryptoModel', () => ConnectedCryptoModel);
