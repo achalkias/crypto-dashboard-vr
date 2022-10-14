@@ -13,23 +13,23 @@ function init(bundle, parent, options = {}) {
   // Render your app content to the default cylinder surface
   r360.renderToLocation(
     r360.createRoot('ConnectedCryptoModel', { /* initial props */ }),
-    new Location([0,0,-1])
+    new Location([0,0,-1]),
   );
 
-  const leftPanel = new Surface(300,600, Surface.SurfaceShape.Flat);
+  const leftPanel = new Surface(300, 600, Surface.SurfaceShape.Flat);
   leftPanel.setAngle(-0.5, 0);
 
   r360.renderToSurface(
-    r360.createRoot('ConnectedLeftPanel', { /* initial props */ }),
-    leftPanel
+    r360.createRoot('ConnectedLeftPanel'),
+    leftPanel,
   );
 
-  const rightPanel = new Surface(300,600, Surface.SurfaceShape.Flat);
+  const rightPanel = new Surface(300, 600, Surface.SurfaceShape.Flat);
   rightPanel.setAngle(0.5, 0);
 
   r360.renderToSurface(
-    r360.createRoot('ConnectedRightPanel', { /* initial props */ }),
-    rightPanel
+    r360.createRoot('ConnectedRightPanel'),
+    rightPanel,
   );
 
   // Load the initial environment
