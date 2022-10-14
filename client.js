@@ -12,8 +12,8 @@ function init(bundle, parent, options = {}) {
 
   // Render your app content to the default cylinder surface
   r360.renderToLocation(
-    r360.createRoot('CryptoDashBoardVR', { /* initial props */ }),
-    r360.getDefaultSurface()
+    r360.createRoot('CryptoModel', { /* initial props */ }),
+    new Location([0,0,-1])
   );
 
   // Load the initial environment
